@@ -39,6 +39,9 @@ func shouldIgnore(m *discordgo.Message) bool {
 	if m.Author == nil {
 		return true
 	}
+	if m.Author != nil && m.Author.Bot {
+		return true
+	}
 	if m.Content == "" {
 		return true
 	}
