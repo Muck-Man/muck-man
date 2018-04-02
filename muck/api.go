@@ -71,5 +71,4 @@ func (api *muckAPI) sendMessage(m *muckMessage) {
 		report(err)
 		return
 	}
-	fmt.Printf("(muck) sent data <edit: %v>\n", m.Edit)
 }
