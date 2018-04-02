@@ -6,6 +6,8 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/Muck-Man/muck-man/muck"
+
 	"github.com/bwmarrin/discordgo"
 	"github.com/joho/godotenv"
 )
@@ -26,8 +28,12 @@ func main() {
 	}
 	discord.AddHandler(onReady)
 	discord.AddHandler(onMessageCreate)
+	discord.AddHandler(onGuildCreate)
+	discord.AddHandler(onGuildDelete)
 
-	fmt.Println("startup.")
+	muck.Register(discord)
+
+	fmt.Println("(bot) startup")
 	if err = discord.Open(); err != nil {
 		panic(err)
 	}
@@ -37,14 +43,20 @@ func main() {
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
 	<-sc
 
-	fmt.Println("shutdown.")
+	fmt.Println("(bot) shutting down")
 	discord.Close()
+	fmt.Println("(bot) bye")
 }
 
 func onReady(s *discordgo.Session, e *discordgo.Ready) {
-	fmt.Printf("%s is ready\n", e.User.String())
+	fmt.Printf("(bot) %s is ready, expecting %d guilds\n", e.User.String(), len(e.Guilds))
 }
-
 func onMessageCreate(s *discordgo.Session, e *discordgo.MessageCreate) {
-	fmt.Printf("(%v) %q\n", e.ChannelID, e.Content)
+	fmt.Printf("(bot) %v %q\n", e.ChannelID, e.Content)
+}
+func onGuildCreate(s *discordgo.Session, e *discordgo.GuildCreate) {
+	fmt.Printf("(bot-guild) create %s\n", e.Name)
+}
+func onGuildDelete(s *discordgo.Session, e *discordgo.GuildDelete) {
+	fmt.Printf("(bot-guild) delete %s\n", e.Name)
 }
