@@ -1,5 +1,5 @@
 package muck
 
 func report(e error) {
-	println("(muck err!)", e)
+	println("(muck err!)", e.Error())
 }

@@ -55,6 +55,9 @@ func onMessageCreate(s *discordgo.Session, e *discordgo.MessageCreate) {
 
 	guild := guildID(s, e.ChannelID)
 	data := newMessage(e.Message, guild, false)
+	if data == nil {
+		return
+	}
 	api.sendMessage(data)
 }
 
@@ -65,5 +68,8 @@ func onMessageUpdate(s *discordgo.Session, e *discordgo.MessageUpdate) {
 
 	guild := guildID(s, e.ChannelID)
 	data := newMessage(e.Message, guild, true)
+	if data == nil {
+		return
+	}
 	api.sendMessage(data)
 }

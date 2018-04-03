@@ -51,6 +51,8 @@ func main() {
 }
 
 func onReady(s *discordgo.Session, e *discordgo.Ready) {
+	s.UpdateStatus(0, ".muck help")
+
 	fmt.Printf("(bot) %s is ready, expecting %d guilds\n", e.User.String(), len(e.Guilds))
 }
 func onMessageCreate(s *discordgo.Session, e *discordgo.MessageCreate) {
