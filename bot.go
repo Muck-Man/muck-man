@@ -6,6 +6,7 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/Muck-Man/muck-man/commands"
 	"github.com/Muck-Man/muck-man/muck"
 
 	"github.com/bwmarrin/discordgo"
@@ -31,6 +32,7 @@ func main() {
 	discord.AddHandler(onGuildCreate)
 	discord.AddHandler(onGuildDelete)
 
+	commands.Register(discord)
 	muck.Register(discord)
 
 	fmt.Println("(bot) startup")
