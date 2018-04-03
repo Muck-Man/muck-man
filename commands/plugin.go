@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/bwmarrin/discordgo"
@@ -15,7 +16,7 @@ func Register(discord *discordgo.Session) {
 }
 
 func onReady(s *discordgo.Session, e *discordgo.Ready) {
-	mention = e.User.Mention()
+	mention = fmt.Sprintf("%s ", e.User.Mention())
 }
 
 func onMessageCreate(s *discordgo.Session, e *discordgo.MessageCreate) {
@@ -25,8 +26,10 @@ func onMessageCreate(s *discordgo.Session, e *discordgo.MessageCreate) {
 	cmd := ""
 	if strings.HasPrefix(e.Content, ".m ") {
 		cmd = e.Content[3:]
+	} else if strings.HasPrefix(e.Content, ".muck ") {
+		cmd = e.Content[6:]
 	} else if strings.HasPrefix(e.Content, mention) {
-		cmd = e.Content[len(mention)+1:]
+		cmd = e.Content[len(mention):]
 	} else {
 		return
 	}
@@ -39,5 +42,11 @@ func onMessageCreate(s *discordgo.Session, e *discordgo.MessageCreate) {
 	if !set {
 		return
 	}
+
+	defer func() {
+		if r := recover(); r != nil {
+			println("(cmd panic!)", r)
+		}
+	}()
 	command.exec(s, e.Message)
 }

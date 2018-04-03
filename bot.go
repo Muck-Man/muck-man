@@ -54,6 +54,9 @@ func onReady(s *discordgo.Session, e *discordgo.Ready) {
 	fmt.Printf("(bot) %s is ready, expecting %d guilds\n", e.User.String(), len(e.Guilds))
 }
 func onMessageCreate(s *discordgo.Session, e *discordgo.MessageCreate) {
+	if e.Content == "" {
+		return
+	}
 	fmt.Printf("(bot) %v %q\n", e.ChannelID, e.Content)
 }
 func onGuildCreate(s *discordgo.Session, e *discordgo.GuildCreate) {
